@@ -1,0 +1,75 @@
+class University:
+    def __init__(self, name, country, program_type, duration, specialization, ranking):
+        self.name = name
+        self.country = country
+        self.program_type = program_type
+        self.duration = duration
+        self.specialization = specialization
+        self.ranking = ranking
+    
+    def __str__(self):
+        return f"{self.name} ({self.country}) - {self.program_type} | Duration: {self.duration} | Specialization: {self.specialization} | Ranking: {self.ranking}"
+
+
+class PGFinder:
+    def __init__(self):
+        # A mock database of universities
+        self.universities = [
+            University("University of Cambridge", "UK", "Full-time", 12, "Software Engineering", 1),
+            University("Stanford University", "USA", "Full-time", 24, "Artificial Intelligence", 2),
+            University("University of Toronto", "Canada", "Part-time", 24, "Software Engineering", 5),
+            University("ETH Zurich", "Switzerland", "Full-time", 18, "Machine Learning", 3),
+            University("National University of Singapore", "Singapore", "Full-time", 18, "Software Engineering", 10),
+            University("Tsinghua University", "China", "Part-time", 24, "Software Engineering", 12),
+            University("University of Melbourne", "Australia", "Full-time", 18, "Software Engineering", 8)
+        ]
+    
+    def search(self, country=None, program_type=None, duration=None, specialization=None, ranking=None):
+        # Filter universities based on user input
+        results = self.universities
+        if country:
+            results = [u for u in results if u.country.lower() == country.lower()]
+        if program_type:
+            results = [u for u in results if u.program_type.lower() == program_type.lower()]
+        if duration:
+            results = [u for u in results if u.duration == duration]
+        if specialization:
+            results = [u for u in results if u.specialization.lower() == specialization.lower()]
+        if ranking:
+            results = [u for u in results if u.ranking <= ranking]
+        
+        return results
+
+
+def main():
+    pg_finder = PGFinder()
+    
+    print("Welcome to the Postgraduate Software Engineering Program Finder!")
+    
+    # Collect user preferences
+    country = input("Enter preferred country (leave blank for no preference): ")
+    program_type = input("Enter program type (Full-time/Part-time, leave blank for no preference): ")
+    try:
+        duration = int(input("Enter program duration in months (leave blank for no preference): ") or 0)
+    except ValueError:
+        duration = None
+    specialization = input("Enter specialization (leave blank for no preference): ")
+    try:
+        ranking = int(input("Enter maximum university ranking (leave blank for no preference): ") or 0)
+    except ValueError:
+        ranking = None
+
+    # Get filtered results
+    results = pg_finder.search(country, program_type, duration, specialization, ranking)
+
+    # Display results
+    if results:
+        print("\nFound the following programs:")
+        for university in results:
+            print(university)
+    else:
+        print("\nNo programs found with the given criteria.")
+
+
+if __name__ == "__main__":
+    main()
